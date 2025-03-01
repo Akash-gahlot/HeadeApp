@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Headers Viewer</title>
+</head>
+<body>
+<h2>Request Headers</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Header Name</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody id="request-headers-table"></tbody>
+</table>
+
+<h2>Response Headers</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Header Name</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody id="response-headers-table"></tbody>
+</table>
+
+<script>
+        fetch('/api/headers')
+            .then(response => {
+                // Extract response headers
+                let responseHeaders = {};
+                response.headers.forEach((value, key) => {
+                    responseHeaders[key] = value;
+                });
+
+                return response.json().then(data => ({ requestHeaders: data.requestHeaders, responseHeaders }));
+            })
+            .then(data => {
+                // Populate Request Headers
+                const requestTable = document.getElementById('request-headers-table');
+                for (let key in data.requestHeaders) {
+                    let row = `<tr><td>${key}</td><td>${data.requestHeaders[key]}</td></tr>`;
+                    requestTable.innerHTML += row;
+                }
+
+                // Populate Response Headers
+                const responseTable = document.getElementById('response-headers-table');
+                for (let key in data.responseHeaders) {
+                    let row = `<tr><td>${key}</td><td>${data.responseHeaders[key]}</td></tr>`;
+                    responseTable.innerHTML += row;
+                }
+            })
+            .catch(error => console.error('Error fetching headers:', error));
+    </script>
+</body>
+</html>
