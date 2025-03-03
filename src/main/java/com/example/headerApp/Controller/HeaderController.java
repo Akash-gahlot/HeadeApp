@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,31 +31,20 @@ public class HeaderController {
         return ResponseEntity.ok().headers(responseHeaders).body(responseBody);
     }
 
-    // Updated endpoint for HTML view
+    // New endpoint for HTML view
     @GetMapping("/view-headers")
-    public String viewHeaders(HttpServletRequest request, HttpServletResponse response, Model model) {
-        // Get Request Headers
-        Map<String, String> requestHeadersMap = new HashMap<>();
-        Enumeration<String> requestHeaderNames = request.getHeaderNames();
-        while (requestHeaderNames.hasMoreElements()) {
-            String headerName = requestHeaderNames.nextElement();
+    public String viewHeaders(HttpServletRequest request, Model model) {
+        Map<String, String> headersMap = new HashMap<>();
+
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
             String headerValue = request.getHeader(headerName);
-            requestHeadersMap.put(headerName, headerValue);
+            headersMap.put(headerName, headerValue);
         }
 
-        // Add custom response headers
-        response.addHeader("Custom-Header", "SpringBootHeaderDemo");
-        response.addHeader("Powered-By", "Spring Boot");
-
-        // Get Response Headers
-        Map<String, String> responseHeadersMap = new HashMap<>();
-        for (String headerName : response.getHeaderNames()) {
-            String headerValue = response.getHeader(headerName);
-            responseHeadersMap.put(headerName, headerValue);
-        }
-
-        model.addAttribute("requestHeaders", requestHeadersMap);
-        model.addAttribute("responseHeaders", responseHeadersMap);
+        model.addAttribute("headers", headersMap);
         return "headers";
     }
+
 }

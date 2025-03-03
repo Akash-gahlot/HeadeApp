@@ -45,22 +45,45 @@
 </head>
 <body>
     <div class="container">
-        <h1>Header App</h1>
+        <h1>Welcome to Header App</h1>
         <div class="button-container">
             <button class="redirect-button" onclick="redirectWithHeader()">View Headers</button>
         </div>
     </div>
 
+    <!-- <h2>Request Headers</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Header Name</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody id="request-headers-table"></tbody>
+    </table>
+
+    <h2>Response Headers</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Header Name</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody id="response-headers-table"></tbody>
+    </table> -->
+
     <script>
         function redirectWithHeader() {
-            fetch('/view-headers', {
-                headers: {
-                    'sm_user': 'testUser'
-                }
-            })
-            .then(response => {
-                window.location.href = '/view-headers';
-            });
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/view-headers', true);
+            xhr.setRequestHeader('sm_user', 'testUser');
+            xhr.onload = function() {
+                document.open();
+                document.write(xhr.responseText);
+                document.close();
+            };
+            xhr.send();
         }
     </script>
 </body>
