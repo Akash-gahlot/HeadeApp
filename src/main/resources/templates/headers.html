@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Request Headers</title>
+    <title>Headers Information</title>
     <style>
         table {
             width: 100%;
@@ -40,7 +40,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="header : ${headers}">
+                <tr th:each="header : ${requestHeaders}">
+                    <td th:text="${header.key}"></td>
+                    <td th:text="${header.value}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h1>Response Headers Information</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Header Name</th>
+                    <th>Header Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="header : ${responseHeaders}">
                     <td th:text="${header.key}"></td>
                     <td th:text="${header.value}"></td>
                 </tr>
@@ -48,4 +64,4 @@
         </table>
     </div>
 </body>
-</html> 
+</html>

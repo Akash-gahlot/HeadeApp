@@ -74,9 +74,13 @@
     </table> -->
 
     <script>
+        // Set a test cookie
+        document.cookie = "testCookie=Hello from cookie!; path=/";
+
         function redirectWithHeader() {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', '/view-headers', true);
+            xhr.withCredentials = true;  // Enable sending cookies
             xhr.setRequestHeader('sm_user', 'testUser');
             xhr.setRequestHeader('user1', 'akash gahlot');
             xhr.onload = function() {
