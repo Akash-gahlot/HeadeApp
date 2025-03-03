@@ -78,6 +78,7 @@
             const xhr = new XMLHttpRequest();
             xhr.open('GET', '/view-headers', true);
             xhr.setRequestHeader('sm_user', 'testUser');
+            xhr.setRequestHeader('user1', 'akash gahlot');
             xhr.onload = function() {
                 document.open();
                 document.write(xhr.responseText);
