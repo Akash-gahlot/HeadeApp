@@ -4,57 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTTP Headers Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .redirect-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .redirect-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h2>Request Headers</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Header Name</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody id="request-headers-table"></tbody>
-</table>
+    <div class="container">
+        <h1>Header App</h1>
+        <div class="button-container">
+            <button class="redirect-button" onclick="redirectWithHeader()">View Headers</button>
+        </div>
+    </div>
 
-<h2>Response Headers</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Header Name</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody id="response-headers-table"></tbody>
-</table>
-
-<script>
-        fetch('/api/headers')
+    <script>
+        function redirectWithHeader() {
+            fetch('/view-headers', {
+                headers: {
+                    'sm_user': 'testUser'
+                }
+            })
             .then(response => {
-                // Extract response headers
-                let responseHeaders = {};
-                response.headers.forEach((value, key) => {
-                    responseHeaders[key] = value;
-                });
-
-                return response.json().then(data => ({ requestHeaders: data.requestHeaders, responseHeaders }));
-            })
-            .then(data => {
-                // Populate Request Headers
-                const requestTable = document.getElementById('request-headers-table');
-                for (let key in data.requestHeaders) {
-                    let row = `<tr><td>${key}</td><td>${data.requestHeaders[key]}</td></tr>`;
-                    requestTable.innerHTML += row;
-                }
-
-                // Populate Response Headers
-                const responseTable = document.getElementById('response-headers-table');
-                for (let key in data.responseHeaders) {
-                    let row = `<tr><td>${key}</td><td>${data.responseHeaders[key]}</td></tr>`;
-                    responseTable.innerHTML += row;
-                }
-            })
-            .catch(error => console.error('Error fetching headers:', error));
+                window.location.href = '/view-headers';
+            });
+        }
     </script>
 </body>
 </html>

@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,19 +32,31 @@ public class HeaderController {
         return ResponseEntity.ok().headers(responseHeaders).body(responseBody);
     }
 
-    // New endpoint for HTML view
+    // Updated endpoint for HTML view
     @GetMapping("/view-headers")
-    public String viewHeaders(HttpServletRequest request, Model model) {
-        Map<String, String> headersMap = new HashMap<>();
-
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
+    public String viewHeaders(HttpServletRequest request, HttpServletResponse response, Model model) {
+        // Get Request Headers
+        Map<String, String> requestHeadersMap = new HashMap<>();
+        Enumeration<String> requestHeaderNames = request.getHeaderNames();
+        while (requestHeaderNames.hasMoreElements()) {
+            String headerName = requestHeaderNames.nextElement();
             String headerValue = request.getHeader(headerName);
-            headersMap.put(headerName, headerValue);
+            requestHeadersMap.put(headerName, headerValue);
         }
 
-        model.addAttribute("headers", headersMap);
+        // Add custom response headers
+        response.addHeader("Custom-Header", "SpringBootHeaderDemo");
+        response.addHeader("Powered-By", "Spring Boot");
+
+        // Get Response Headers
+        Map<String, String> responseHeadersMap = new HashMap<>();
+        for (String headerName : response.getHeaderNames()) {
+            String headerValue = response.getHeader(headerName);
+            responseHeadersMap.put(headerName, headerValue);
+        }
+
+        model.addAttribute("requestHeaders", requestHeadersMap);
+        model.addAttribute("responseHeaders", responseHeadersMap);
         return "headers";
     }
 }
